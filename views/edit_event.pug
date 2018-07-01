@@ -1,0 +1,30 @@
+extends layout
+
+block content
+    h1 #{title}
+    form(method='POST', action='/events/edit/'+event._id)
+        #form-group
+            label Title:
+            input.form-control(name='title', type='text', value=event.title)
+        #form-group
+            label Author:
+            input.form-control(name='author', type='text', value=event.author)
+        #form-group
+            label Lat:
+            input.form-control(name='lat', type='text', value=event.lat)
+            label Lng:
+            input.form-control(name='lng', type='text' value=event.lng)
+        #form-group
+            label Game:
+            input.form-control(name='game', type='text' value=event.game)
+        #form-group
+            label Day:
+            input.form-control(name='day', type='text' value=event.day)
+        #form-group
+            label Time:
+            input.form-control(name='time', type='text' value=event.time)
+        #form-group
+            label Link:
+            input.form-control(name='link', type='text' value=event.link)
+        br
+        input.btn.btn-primary(type='submit', value='Submit')

@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= event.title
+    h5 Added by #{event.author}
+    p Located at ( lat: #{event.lat}, lng: #{event.lng} )
+    p Playing #{event.game}
+    p On #{event.day}
+    p At #{event.time}
+    a(href=event.link) Click here for more details
+    hr
+    a.btn.btn-secondary(href='/event/edit/'+event._id) Edit
+    a.btn.btn-danger.delete-event(href='#', data-id=event._id) Delete
