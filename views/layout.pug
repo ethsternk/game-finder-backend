@@ -13,10 +13,12 @@ html
                 ul.navbar-nav.mr-auto
                     li.nav-item
                         a.nav-link(href='/') Home
-                    li.nav-item
-                        a.nav-link(href='/events/add') Add Event
+                    if user
+                        li.nav-item
+                            a.nav-link(href='/events/add') Add Event
                 ul.navbar-nav.navbar-right
                     if user
+                        li.nav-link Hi there, #{user.name}!
                         li.nav-item
                             a.nav-link(href='/users/logout') Logout
                     else
@@ -30,7 +32,6 @@ html
                 each error, i in errors
                     div.alert.alert-danger #{error.msg}
             block content
-            br
             hr
             footer
                 p Copywight &copy; 2018

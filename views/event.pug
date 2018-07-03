@@ -3,12 +3,14 @@ extends layout
 block content
     br
     h1= event.title
-    h5 Added by #{event.author}
+    h5 Added by #{author}
     p Located at ( lat: #{event.lat}, lng: #{event.lng} )
     p Playing #{event.game}
     p On #{event.day}
     p At #{event.time}
     a(href=event.link) Click here for more details
     hr
-    a.btn.btn-secondary(href='/events/edit/'+event._id) Edit
-    a.btn.btn-danger.delete-event(href='#', data-id=event._id) Delete
+    if user
+        if user.id ==event.author
+            a.btn.btn-secondary(href='/events/edit/'+event._id) Edit
+            a.btn.btn-danger.delete-event(href='#', data-id=event._id) Delete
