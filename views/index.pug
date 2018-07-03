@@ -1,8 +1,9 @@
 extends layout
 
 block content
+    br
     h1 #{title}
     ul.list-group
         each event, i in events
             li.list-group-item
-                a(href="/event/"+event._id)= event.title
+                a(href="/events/"+event._id)= event.title
