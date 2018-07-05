@@ -95,6 +95,17 @@ app.get('/', (req, res) => {
     });
 });
 
+// events route raw
+app.get('/events', (req, res) => {
+    Event.find({}, (err, events) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(events);
+        }
+    });
+});
+
 // route files
 let events = require('./routes/events');
 let users = require('./routes/users');

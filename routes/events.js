@@ -54,6 +54,44 @@ router.post('/add', (req, res) => {
 
 });
 
+// RAW ADD
+router.post('/add-raw', (req, res) => {
+
+    req.checkBody('title', 'Title is required').notEmpty();
+    // req.checkBody('author', 'Author is required').notEmpty();
+    req.checkBody('lat', 'A latitude value is required').notEmpty();
+    req.checkBody('lng', 'A longitude value is required').notEmpty();
+    req.checkBody('game', 'Game is required').notEmpty();
+    req.checkBody('day', 'Day is required').notEmpty();
+    req.checkBody('time', 'Time is required').notEmpty();
+    req.checkBody('link', 'Link is required').notEmpty();
+
+    let errors = req.validationErrors();
+    if (errors) {
+        res.send(errors);
+    } else {
+        let event = new Event();
+        event.title = req.body.title;
+        event.author = req.body.author;
+        event.lat = req.body.lat;
+        event.lng = req.body.lng;
+        event.game = req.body.game;
+        event.day = req.body.day;
+        event.time = req.body.time;
+        event.link = req.body.link;
+
+        event.save((err) => {
+            if (err) {
+                console.log(err);
+                return;
+            } else {
+                res.send(event);
+            }
+        });
+    }
+
+});
+
 // load edit form
 router.get('/edit/:id', ensureAuthenticated, (req, res) => {
     Event.findById(req.params.id, (err, event) => {
@@ -94,23 +132,73 @@ router.post('/edit/:id', (req, res) => {
     });
 });
 
-// delete event
-router.delete('/:id', function (req, res) {
-    if (!req.user._id) {
-        res.status(500).send();
-    }
+// RAW EDIT
+router.post('/edit', (req, res) => {
+    let event = {};
+    event.title = req.body.title;
+    // event.author = req.body.author;
+    event.lat = req.body.lat;
+    event.lng = req.body.lng;
+    event.game = req.body.game;
+    event.day = req.body.day;
+    event.time = req.body.time;
+    event.link = req.body.link;
 
-    let query = { _id: req.params.id }
+    let query = { _id: req.body.event_id }
 
-    Event.findById(req.params.id, function (err, event) {
-        if (event.author != req.user._id) {
+    Event.findById(req.body.event_id, function (err, event) {
+        if (event.author != req.body.author) {
+            res.status(500).send();
+        } else {
+            Event.update(query, event, (err) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                } else {
+                    res.send(query);
+                }
+            });
+        }
+    });
+});
+
+// // delete event
+// router.delete('/:id', function (req, res) {
+//     if (!req.user._id) {
+//         res.status(500).send();
+//     }
+
+//     let query = { _id: req.params.id }
+
+//     Event.findById(req.params.id, function (err, event) {
+//         if (event.author != req.user._id) {
+//             res.status(500).send();
+//         } else {
+//             Event.remove(query, (err) => {
+//                 if (err) {
+//                     console.log(err);
+//                 }
+//                 res.send('Success');
+//             });
+//         }
+//     });
+
+// });
+
+// delete RAW
+router.delete('/delete', function (req, res) {
+
+    let query = { _id: req.body.id }
+
+    Event.findById(req.body.id, function (err, event) {
+        if (event.author != req.body.author) {
             res.status(500).send();
         } else {
             Event.remove(query, (err) => {
                 if (err) {
                     console.log(err);
                 }
-                res.send('Success');
+                res.send('Success. it gone');
             });
         }
     });
