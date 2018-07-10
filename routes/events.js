@@ -67,27 +67,34 @@ router.post('/add-raw', (req, res) => {
     req.checkBody('link', 'Link is required').notEmpty();
 
     let errors = req.validationErrors();
+
     if (errors) {
         res.send(errors);
     } else {
-        let event = new Event();
-        event.title = req.body.title;
-        event.author = req.body.author;
-        event.lat = req.body.lat;
-        event.lng = req.body.lng;
-        event.game = req.body.game;
-        event.day = req.body.day;
-        event.time = req.body.time;
-        event.link = req.body.link;
+        User.findById(req.body.author, function (err, user) {
+            if (user) {
+                let event = new Event();
+                event.title = req.body.title;
+                event.author = req.body.author;
+                event.lat = req.body.lat;
+                event.lng = req.body.lng;
+                event.game = req.body.game;
+                event.day = req.body.day;
+                event.time = req.body.time;
+                event.link = req.body.link;
 
-        event.save((err) => {
-            if (err) {
-                console.log(err);
-                return;
+                event.save((err) => {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    } else {
+                        res.send(event);
+                    }
+                });
             } else {
-                res.send(event);
+                res.send("invalid user id (not logged in)");
             }
-        });
+        })
     }
 
 });
