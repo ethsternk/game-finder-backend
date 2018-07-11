@@ -6,7 +6,8 @@ const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const config = require('./config/database')
+const config = require('./config/database');
+const cors = require('cors');
 
 mongoose.connect(config.database);
 let db = mongoose.connection;
@@ -34,6 +35,9 @@ app.set('view engine', 'pug');
 // body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// cors stuff
+app.use(cors());
 
 // set public folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -76,10 +80,15 @@ require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('*', function(req, res, next) {
+app.get('*', function (req, res, next) {
     res.locals.user = req.user || null;
     next();
 });
+
+// cors stuff
+app.get('/products/:id', function (req, res, next) {
+    res.json({ msg: 'This is CORS-enabled for all origins!' })
+})
 
 // home route
 app.get('/', (req, res) => {
